@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import Filter from './Filter'
+import PersonForm from './PersonForm'
+import Persons from './Persons'
 
 const App = () => {
 
@@ -10,72 +12,26 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [nameFilter, setNameFilter] = useState('');
 
-  // add the newName component to the persons array
-  const add = (event) => {
-    //check for a duplicate
-    const isDuplicate = persons.some(
-      (person) => person.name == newName
-    );
-
-    if (isDuplicate) {
-      event.preventDefault()
-      alert(`${newName} is already added to the phonebook!`)
-      return;
-    }
-
-    event.preventDefault()
-    const newPerson = {
-      name: newName,
-      number: newNumber
-    }
-    setPersons(persons.concat(newPerson))
-    setNewName('') // clear newName buffer
-    setNewNumber('') // clear newNumber buffer
-    console.log(persons, event.target)
-  }
-
-  // we change the state of the newName component...
-  const handleAddName = (event) => {
-    setNewName(event.target.value)
-  }
-
-  const handleAddNumber = (event) => {
-    setNewNumber(event.target.value)
-  }
-
-  const handleFilter = (event) => {
-    setNameFilter(event.target.value)
-  }
-
-  const filteredNames = persons.filter(person =>
-    person.name.toLowerCase().includes(nameFilter.toLowerCase())
-  );
+  console.log(persons)
 
   return (
     <div>
-      <h1>Phonebook (Tiny Problems #1)</h1>
-      <form>
-        <div>
-          Search: <input value={nameFilter} onChange={handleFilter} /> 
-        </div>
-      </form>
+      <h1>Tiny Phonebook</h1>
+      <Filter 
+        nameFilter={nameFilter} 
+        setNameFilter={setNameFilter} />
 
       <h2>Add New Contact</h2>
-      <form onSubmit={add}>
-        <div>
-          Name: <input value={newName} onChange={handleAddName} />
-        </div>
-        <div>
-          Number: <input value={newNumber} onChange={handleAddNumber} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm 
+        persons={persons} 
+        setPersons={setPersons}
+        newName={newName}
+        setNewName={setNewName}
+        newNumber={newNumber}
+        setNewNumber={setNewNumber} />
+      
       <h2>Numbers</h2>
-          {filteredNames.map(person => 
-            (<p key={person.name}>{person.name} {person.number}</p>)
-          )}
+      <Persons persons={persons} nameFilter={nameFilter}/>
     </div>
   )
 }

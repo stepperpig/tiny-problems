@@ -1,15 +1,9 @@
 import { useState } from 'react'
 
-const Filter = (props) => {
-    const [nameFilter, setNameFilter] = useState('');
+const Filter = ({ nameFilter, setNameFilter }) => {
     const handleFilter = (event) => {
-        setNameFilter(event.target.value)
-        console.log(nameFilter)
+      setNameFilter(event.target.value)
     }
-
-    const filteredNames = persons.filter(person =>
-        person.name.toLowerCase().includes(nameFilter.toLowerCase())
-    );
     
   return (
     <form>
