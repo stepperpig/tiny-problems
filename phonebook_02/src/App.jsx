@@ -3,6 +3,7 @@ import axios from 'axios'
 import Filter from './Filter'
 import PersonForm from './PersonForm'
 import Persons from './Persons'
+import numberService from './services/persons'
 
 const App = () => {
 
@@ -12,11 +13,11 @@ const App = () => {
   const [nameFilter, setNameFilter] = useState('');
 
   useEffect(() => {
-    axios
-    .get("http://localhost:3001/persons")
-    .then(response => {
-      setPersons(response.data)
-    })
+    numberService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+      })
   }, [])
 
   return (
@@ -36,7 +37,12 @@ const App = () => {
         setNewNumber={setNewNumber} />
       
       <h2>Numbers</h2>
-      <Persons persons={persons} nameFilter={nameFilter}/>
+      <Persons 
+        persons={persons}
+        setPersons={setPersons}
+        nameFilter={nameFilter}
+        
+      />
     </div>
   )
 }

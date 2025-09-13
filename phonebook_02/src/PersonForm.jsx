@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import numberService from './services/persons'
 
 const PersonForm = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumber}) => {
     // add the newName component to the persons array
@@ -10,7 +11,21 @@ const PersonForm = ({ persons, newName, newNumber, setPersons, setNewName, setNe
 
     if (isDuplicate) {
       event.preventDefault()
-      alert(`${newName} is already added to the phonebook!`)
+      
+      if (window.confirm(`${newName} is already added to the phonebook! Wanna replace the old number with a new one?`)) {
+          const target = persons.find((p) => p.name == newName)
+
+          console.log(target)
+          const newObject = { name: newName, number: newNumber}
+          numberService.update(target.id, newObject).then(response => {
+            //console.log("what the fuck is the response?")
+            console.log(response.data)
+            setPersons(persons.map(target => target.id === response.data.id ? response.data : target))
+
+          }).catch(error => {
+            console.error("Shit! Something went wrong!")
+          })
+      }
       return;
     }
 
@@ -19,9 +34,14 @@ const PersonForm = ({ persons, newName, newNumber, setPersons, setNewName, setNe
       name: newName,
       number: newNumber
     }
-    setPersons(persons.concat(newPerson))
-    setNewName('') // clear newName buffer
-    setNewNumber('') // clear newNumber buffer
+
+    numberService
+      .create(newPerson)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   // we change the state of the newName component...
