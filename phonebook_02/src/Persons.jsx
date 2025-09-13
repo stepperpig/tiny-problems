@@ -4,7 +4,7 @@ import numberService from './services/persons'
 
 const Persons = ({ persons, setPersons, nameFilter }) => {
     const filteredNames = persons.filter(p =>
-        p //p.n.toLowerCase().includes(nameFilter.toLowerCase())
+        p.name.toLowerCase().includes(nameFilter.toLowerCase()) //p.n.toLowerCase().includes(nameFilter.toLowerCase())
     );
 
     const label = 'delete'
@@ -23,7 +23,7 @@ const Persons = ({ persons, setPersons, nameFilter }) => {
 
     return (
         filteredNames.map(person => 
-            (<li key={person.id}>{person.name} {person.number}
+            (<li key={person.name}>{person.name} {person.number}
                 <button onClick={() => {
                     if (window.confirm(`Delete ${person.name}?`)) {
                         deleteNumber(person)
