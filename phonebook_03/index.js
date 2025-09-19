@@ -26,10 +26,24 @@ let numbers = [
     }
 ]
 
+// Middleware to add timestamp
+app.use((req, res, next) => {
+    req.requestTime = new Date()
+    next(); // Pass control to next middleware or route handler
+})
+
 // GET all contacts
 app.get('/', (req, res) => {
     res.json(numbers)
 })
+
+// Display a page with request time
+app.get('/info', (req, res) => {
+    const requestTime = req.requestTime.toString()
+    res.send(`<p>Found info for ${numbers.length} people</p>
+        <p>${requestTime}</p>`)
+})
+
 
 const PORT = 3000
 app.listen(PORT)
