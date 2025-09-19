@@ -67,6 +67,34 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end()
 })
 
+const generateId = () => {
+    const randId = Math.floor(Math.random() * 4000)
+    return String(randId)
+}
+
+// Post a single contact entry with a random id
+app.post('/api/persons', (req, res) => {
+    const body = req.body
+
+    if (!body.name || !body.number) {
+        res.status(400).json({
+            error: 'name or number missing'
+        })
+    } else if (numbers.find(n => n.name === body.name)) {
+        res.status(404).json({
+            error: 'name must be unique'
+        })
+    } else {
+        const contact = {
+            id: generateId(),
+            name: body.name,
+            number: body.number
+        }
+
+        numbers = numbers.concat(contact)
+        res.json(contact)
+    }
+})
 
 const PORT = 3000
 app.listen(PORT)
