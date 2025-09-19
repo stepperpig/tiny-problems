@@ -3,6 +3,8 @@ const http = require('http')
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 let numbers = [
     { 
       "id": "1",
@@ -42,6 +44,27 @@ app.get('/info', (req, res) => {
     const requestTime = req.requestTime.toString()
     res.send(`<p>Found info for ${numbers.length} people</p>
         <p>${requestTime}</p>`)
+})
+
+// Display a single contact entry
+app.get('/api/persons/:id', (req, res) => {
+    const id = req.params.id
+    number = numbers.find(num => num.id === id)
+
+    // error checking
+    if (number) {
+        res.json(number)
+    } else {
+        res.status(404).end()
+    }
+})
+
+// Delete a single contact entry by id
+app.delete('/api/persons/:id', (req, res) => {
+    const id = req.params.id
+    numbers = numbers.filter(num => num.id !== id)
+
+    res.status(204).end()
 })
 
 
