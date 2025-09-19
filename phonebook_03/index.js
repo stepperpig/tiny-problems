@@ -1,9 +1,12 @@
 const http = require('http')
+const morgan = require('morgan')
+const finalhandler = require('finalhandler')
 
 const express = require('express')
 const app = express()
 
 app.use(express.json())
+app.use(morgan('tiny'))
 
 let numbers = [
     { 
@@ -67,6 +70,7 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end()
 })
 
+// Helper method to generate id
 const generateId = () => {
     const randId = Math.floor(Math.random() * 4000)
     return String(randId)
@@ -95,6 +99,8 @@ app.post('/api/persons', (req, res) => {
         res.json(contact)
     }
 })
+
+// Log messages to console
 
 const PORT = 3000
 app.listen(PORT)
